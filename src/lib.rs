@@ -203,7 +203,7 @@ impl<T: Unsigned + PrimInt + FromPrimitive> PrimUInt for T {}
 
 /// Tracks the usage of nonces
 pub struct SlidingWindow<B: PrimUInt, N: PrimUInt> {
-	window: Vec<B>,
+	window: Box<[B]>,
 	wt: usize,
 	wb: usize,
 	_nonce_type: PhantomData<N>,
@@ -211,7 +211,17 @@ pub struct SlidingWindow<B: PrimUInt, N: PrimUInt> {
 
 impl<B: PrimUInt, N: PrimUInt> SlidingWindow<B, N> {
 	/// Create a new SlidingWindow to track nonces
-	pub fn new(minimum_window_size: usize) -> Self { unimplemented!() }
+	pub fn new(minimum_window_size: usize) -> Self {
+		let bits = N::zero().count_zeros() as usize;
+		let blocks = ((minimum_window_size + bits - 1) / bits) + 1;
+
+		Self {
+			window: vec![B::zero(); blocks].into_boxed_slice(),
+			wt: ((blocks - 1) * bits) - 1,
+			wb: 0,
+			_nonce_type: PhantomData::default(),
+		}
+	}
 
 	/// Record nonce and detect replay
 	///
