@@ -50,7 +50,7 @@ mod tests {
 
 		use num_traits::FromPrimitive;
 
-		use crate::{PrimUInt, ReplayedNonce, SlidingWindow};
+		use crate::{PrimUInt, ReplayedNonce};
 
 		pub struct ModelWindow<B: PrimUInt, N: PrimUInt> {
 			nonces: HashSet<N>,
@@ -85,9 +85,10 @@ mod tests {
 				self.max_nonce = Some(max);
 
 				// determine if in window
-				let min = max
-					- FromPrimitive::from_usize(self.minimum_window_size)
-						.unwrap_or_else(N::max_value);
+				let min = max.saturating_sub(
+					FromPrimitive::from_usize(self.minimum_window_size)
+						.unwrap_or_else(N::max_value),
+				);
 				if nonce < min {
 					// uncertain
 					Ok(None)
@@ -96,22 +97,37 @@ mod tests {
 					Ok(Some(()))
 				}
 			}
+		}
+	}
 
-			pub fn check(&mut self, nonce: N, target: &mut SlidingWindow<B, N>) -> bool {
-				let expected = self.update(nonce);
-				let actual = target.update(nonce);
+	fn check<B: PrimUInt, N: PrimUInt + Hash>(
+		model: &mut ModelWindow<B, N>,
+		target: &mut SlidingWindow<B, N>,
+		nonce: N,
+		print: bool,
+	) -> bool
+	{
+		let expected = model.update(nonce);
+		let actual = target.update(nonce);
 
-				if let Ok(check) = expected {
-					if check.is_some() {
-						actual.is_ok()
-					} else {
-						// handle uncertain
-						true
-					}
-				} else {
-					actual.is_err()
+		if let Ok(check) = expected {
+			if check.is_some() {
+				if print {
+					eprint!("Accept");
 				}
+				actual.is_ok()
+			} else {
+				// handle uncertain
+				if print {
+					eprint!("Undefined");
+				}
+				true
 			}
+		} else {
+			if print {
+				eprint!("Reject");
+			}
+			actual.is_err()
 		}
 	}
 
@@ -144,14 +160,17 @@ mod tests {
 		let rng = &mut rand::thread_rng();
 
 		for _ in 0..iters {
-			nonce = nonce
-				+ FromPrimitive::from_usize(rand_range.sample(rng) - max_sub)
-					.unwrap_or_else(N::max_value);
+			let diff = (rand_range.sample(rng) as i64) - (max_sub as i64);
+			nonce = if diff.is_negative() {
+				nonce.saturating_sub(FromPrimitive::from_i64(diff.abs()).unwrap())
+			} else {
+				nonce.saturating_add(FromPrimitive::from_i64(diff).unwrap())
+			};
 
 			if print {
 				eprintln!("Nonce: {:?}", nonce);
 			}
-			assert!(model_window.check(nonce, window));
+			assert!(check(model_window, window, nonce, print));
 		}
 
 		if print {
