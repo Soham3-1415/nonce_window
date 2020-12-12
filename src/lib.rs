@@ -88,7 +88,7 @@ mod tests {
 					FromPrimitive::from_usize(self.minimum_window_size)
 						.unwrap_or_else(N::max_value),
 				);
-				if nonce < min {
+				if nonce <= min {
 					// uncertain
 					Ok(None)
 				} else {
