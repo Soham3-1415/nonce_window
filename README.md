@@ -1,6 +1,6 @@
 # Nonce Window
 [![Build Status](https://travis-ci.com/Soham3-1415/nonce_window.svg?token=m1JaVhcrW1uB3xwn43d2&branch=master)](https://travis-ci.com/Soham3-1415/nonce_window)
-[![codecov](https://codecov.io/gh/Soham3-1415/udp_punch/branch/master/graph/badge.svg?token=3sOO5aBbhT)](https://codecov.io/gh/Soham3-1415/udp_punch)
+[![codecov](https://codecov.io/gh/Soham3-1415/nonce_window/branch/master/graph/badge.svg?token=3HOSHEBYSV)](https://codecov.io/gh/Soham3-1415/nonce_window)
 
 Implementation of Anti-Replay Algorithm without Bit Shifting based on RFC 6479.
 Number of blocks is not necessarily a power of two.
