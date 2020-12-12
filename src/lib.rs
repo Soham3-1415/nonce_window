@@ -82,16 +82,10 @@ mod tests {
 				}
 
 				// set max nonce
-				let max = if let Some(max) = self.max_nonce {
-					if nonce > max {
-						nonce
-					} else {
-						max
-					}
-				} else {
-					nonce
-				};
-
+				let max = self
+					.max_nonce
+					.map(|max| std::cmp::max(nonce, max))
+					.unwrap_or(nonce);
 				self.max_nonce = Some(max);
 
 				// determine if in window
@@ -115,7 +109,8 @@ mod tests {
 		target: &mut SlidingWindow<B, N>,
 		nonce: N,
 		print: bool,
-	) -> bool {
+	) -> bool
+	{
 		let expected = model.update(nonce);
 		let actual = target.update(nonce);
 
@@ -149,7 +144,8 @@ mod tests {
 		iters: usize,
 		print: bool,
 		seed: Option<u64>,
-	) {
+	)
+	{
 		if print {
 			eprintln!(
 				"Block Type: {:?}, Nonce Type: {:?}, Minimum Window Size: {:?}, Max Sub: {:?}, Max Add: {:?}, Iters: {:?}, Seed: {:?}",
@@ -224,183 +220,125 @@ mod tests {
 	}
 
 	#[test]
-	fn random_u8_u8() {
-		random::<u8, u8>();
+	fn random_u8_u8() { random::<u8, u8>(); }
+
+	#[test]
+	fn random_u16_u8() { random::<u16, u8>(); }
+
+	#[test]
+	fn random_u32_u8() { random::<u32, u8>(); }
+
+	#[test]
+	fn random_u64_u8() { random::<u64, u8>(); }
+
+	#[test]
+	fn random_u128_u8() { random::<u128, u8>(); }
+
+	#[test]
+	fn random_usize_u8() { random::<usize, u8>(); }
+
+	#[test]
+	fn random_u8_u16() { random::<u8, u16>(); }
+
+	#[test]
+	fn random_u16_u16() { random::<u16, u16>(); }
+
+	#[test]
+	fn random_u32_u16() { random::<u32, u16>(); }
+
+	#[test]
+	fn random_u64_u16() { random::<u64, u16>(); }
+
+	#[test]
+	fn random_u128_u16() { random::<u128, u16>(); }
+
+	#[test]
+	fn random_usize_u16() { random::<usize, u16>(); }
+
+	#[test]
+	fn random_u8_u32() { random::<u8, u32>(); }
+
+	#[test]
+	fn random_u16_u32() { random::<u16, u32>(); }
+
+	#[test]
+	fn random_u32_u32() { random::<u32, u32>(); }
+
+	#[test]
+	fn random_u64_u32() { random::<u64, u32>(); }
+
+	#[test]
+	fn random_u128_u32() { random::<u128, u32>(); }
+
+	#[test]
+	fn random_usize_u32() { random::<usize, u32>(); }
+
+	#[test]
+	fn random_u8_u64() { random::<u8, u64>(); }
+
+	#[test]
+	fn random_u16_u64() { random::<u16, u64>(); }
+
+	#[test]
+	fn random_u32_u64() { random::<u32, u64>(); }
+
+	#[test]
+	fn random_u64_u64() { random::<u64, u64>(); }
+
+	#[test]
+	fn random_u128_u64() { random::<u128, u64>(); }
+
+	#[test]
+	fn random_usize_u64() { random::<usize, u64>(); }
+
+	#[test]
+	fn random_u8_u128() { random::<u8, u128>(); }
+
+	#[test]
+	fn random_u16_u128() { random::<u16, u128>(); }
+
+	#[test]
+	fn random_u32_u128() { random::<u32, u128>(); }
+
+	#[test]
+	fn random_u64_u128() { random::<u64, u128>(); }
+
+	#[test]
+	fn random_u128_u128() { random::<u128, u128>(); }
+
+	#[test]
+	fn random_usize_u128() { random::<usize, u128>(); }
+
+	#[test]
+	fn random_u8_usize() { random::<u8, usize>(); }
+
+	#[test]
+	fn random_u16_usize() { random::<u16, usize>(); }
+
+	#[test]
+	fn random_u32_usize() { random::<u32, usize>(); }
+
+	#[test]
+	fn random_u64_usize() { random::<u64, usize>(); }
+
+	#[test]
+	fn random_u128_usize() { random::<u128, usize>(); }
+
+	#[test]
+	fn random_usize_usize() { random::<usize, usize>(); }
+
+	#[test]
+	fn print_sliding_window_test_debug() {
+		random_increment::<u64, u64>(512, 64, 128, 128, true, None);
 	}
 
 	#[test]
-	fn random_u16_u8() {
-		random::<u16, u8>();
-	}
+	fn print_replayed_nonce() {
+		let window = &mut SlidingWindow::<u64, u64>::new(512);
 
-	#[test]
-	fn random_u32_u8() {
-		random::<u32, u8>();
-	}
-
-	#[test]
-	fn random_u64_u8() {
-		random::<u64, u8>();
-	}
-
-	#[test]
-	fn random_u128_u8() {
-		random::<u128, u8>();
-	}
-
-	#[test]
-	fn random_usize_u8() {
-		random::<usize, u8>();
-	}
-
-	#[test]
-	fn random_u8_u16() {
-		random::<u8, u16>();
-	}
-
-	#[test]
-	fn random_u16_u16() {
-		random::<u16, u16>();
-	}
-
-	#[test]
-	fn random_u32_u16() {
-		random::<u32, u16>();
-	}
-
-	#[test]
-	fn random_u64_u16() {
-		random::<u64, u16>();
-	}
-
-	#[test]
-	fn random_u128_u16() {
-		random::<u128, u16>();
-	}
-
-	#[test]
-	fn random_usize_u16() {
-		random::<usize, u16>();
-	}
-
-	#[test]
-	fn random_u8_u32() {
-		random::<u8, u32>();
-	}
-
-	#[test]
-	fn random_u16_u32() {
-		random::<u16, u32>();
-	}
-
-	#[test]
-	fn random_u32_u32() {
-		random::<u32, u32>();
-	}
-
-	#[test]
-	fn random_u64_u32() {
-		random::<u64, u32>();
-	}
-
-	#[test]
-	fn random_u128_u32() {
-		random::<u128, u32>();
-	}
-
-	#[test]
-	fn random_usize_u32() {
-		random::<usize, u32>();
-	}
-
-	#[test]
-	fn random_u8_u64() {
-		random::<u8, u64>();
-	}
-
-	#[test]
-	fn random_u16_u64() {
-		random::<u16, u64>();
-	}
-
-	#[test]
-	fn random_u32_u64() {
-		random::<u32, u64>();
-	}
-
-	#[test]
-	fn random_u64_u64() {
-		random::<u64, u64>();
-	}
-
-	#[test]
-	fn random_u128_u64() {
-		random::<u128, u64>();
-	}
-
-	#[test]
-	fn random_usize_u64() {
-		random::<usize, u64>();
-	}
-
-	#[test]
-	fn random_u8_u128() {
-		random::<u8, u128>();
-	}
-
-	#[test]
-	fn random_u16_u128() {
-		random::<u16, u128>();
-	}
-
-	#[test]
-	fn random_u32_u128() {
-		random::<u32, u128>();
-	}
-
-	#[test]
-	fn random_u64_u128() {
-		random::<u64, u128>();
-	}
-
-	#[test]
-	fn random_u128_u128() {
-		random::<u128, u128>();
-	}
-
-	#[test]
-	fn random_usize_u128() {
-		random::<usize, u128>();
-	}
-
-	#[test]
-	fn random_u8_usize() {
-		random::<u8, usize>();
-	}
-
-	#[test]
-	fn random_u16_usize() {
-		random::<u16, usize>();
-	}
-
-	#[test]
-	fn random_u32_usize() {
-		random::<u32, usize>();
-	}
-
-	#[test]
-	fn random_u64_usize() {
-		random::<u64, usize>();
-	}
-
-	#[test]
-	fn random_u128_usize() {
-		random::<u128, usize>();
-	}
-
-	#[test]
-	fn random_usize_usize() {
-		random::<usize, usize>();
+		window.update(1).unwrap();
+		println!("{:?}", window.update(1).unwrap_err());
+		println!("{}", window.update(1).unwrap_err());
 	}
 }
 

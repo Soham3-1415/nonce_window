@@ -1,2 +1,5 @@
 restylers:
-  - rustfmt
+  - name: rustfmt
+    image: restyled/restyler-rustfmt:v1.4.14-nightly
+    command:
+      - rustfmt
