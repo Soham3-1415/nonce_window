@@ -109,7 +109,8 @@ mod tests {
 		target: &mut SlidingWindow<B, N>,
 		nonce: N,
 		print: bool,
-	) -> bool {
+	) -> bool
+	{
 		let expected = model.update(nonce);
 		let actual = target.update(nonce);
 
@@ -143,7 +144,8 @@ mod tests {
 		iters: usize,
 		print: bool,
 		seed: Option<u64>,
-	) {
+	)
+	{
 		if print {
 			eprintln!(
 				"Block Type: {:?}, Nonce Type: {:?}, Minimum Window Size: {:?}, Max Sub: {:?}, Max Add: {:?}, Iters: {:?}, Seed: {:?}",
