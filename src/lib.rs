@@ -204,6 +204,10 @@ mod tests {
 			.unwrap_or_else(|_| String::from("false"))
 			.parse()
 			.unwrap();
+
+		#[cfg(debug_assertions)]
+		let iters = 10_000;
+		#[cfg(not(debug_assertions))]
 		let iters = 1_000_000;
 
 		let window_sizes: [usize; 5] = [1, 8, 256, 2048, 8192];
