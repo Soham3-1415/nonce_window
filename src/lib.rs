@@ -410,18 +410,18 @@ impl<B: PrimUInt + Debug + Binary, N: PrimUInt> Debug for SlidingWindow<B, N> {
 			if block_index == block_wt {
 				tmp[nonce_bitmap_mask_wt.leading_zeros() as usize] =
 					if block & nonce_bitmap_mask_wt == B::zero() {
-						b'U'
+						b't'
 					} else {
-						b'S'
+						b'T'
 					};
 			}
 
 			if block_index == block_wb {
 				tmp[nonce_bitmap_mask_wb.leading_zeros() as usize] =
 					if block & nonce_bitmap_mask_wb == B::zero() {
-						b'u'
+						b'b'
 					} else {
-						b's'
+						b'B'
 					};
 			}
 
