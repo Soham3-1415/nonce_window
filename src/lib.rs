@@ -1,6 +1,5 @@
 //! Implementation of Anti-Replay Algorithm without Bit Shifting
 //! Based on RFC 6479
-//! Number of blocks is not necessarily a power of two
 //!
 //! # Examples
 //! ```
