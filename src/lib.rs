@@ -82,12 +82,10 @@ mod tests {
 				}
 
 				// set max nonce
-				let max = if let Some(max) = self.max_nonce {
-					if nonce > max { nonce } else { max }
-				} else {
-					nonce
-				};
-
+				let max = self
+					.max_nonce
+					.map(|max| std::cmp::max(nonce, max))
+					.unwrap_or(nonce);
 				self.max_nonce = Some(max);
 
 				// determine if in window
