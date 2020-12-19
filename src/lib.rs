@@ -1,3 +1,5 @@
+#![deny(missing_debug_implementations)]
+
 //! Implementation of Anti-Replay Algorithm without Bit Shifting
 //! Based on RFC 6479
 //!
